@@ -1,0 +1,19 @@
+#!/usr/bin/expect -f
+
+set ip [ lindex $argv 0 ]
+set username root
+set password zhangwei
+set timeout 30
+
+send_user "开始用scp命令发送文件\n"
+spawn scp -r /root/.ssh/id_dsa.pub $username@$ip:/root/.ssh/authorized_keys
+expect {
+	"(yes/no)?" {
+		send "yes\r"
+		sleep 1
+		expect "password:"
+		send "$password\r"
+	}
+	"password:" { send "$password\r" }
+}
+expect eof
